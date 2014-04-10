@@ -73,8 +73,11 @@ rekapiModules.push(function (context) {
       var interpolatedPosition =
           (correctedMillisecond - this.millisecond) / delta;
 
-      value = interpolate(fromObj, toObj, interpolatedPosition,
-          nextProperty.easing)[this.name];
+      var easing = Rekapi.config.useTargetKeyframeForEasing ?
+          nextProperty.easing : this.easing;
+
+      value = interpolate(
+          fromObj, toObj, interpolatedPosition, easing)[this.name];
     } else {
       value = this.value;
     }

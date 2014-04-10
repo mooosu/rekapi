@@ -621,6 +621,10 @@ var rekapiCore = function (root, _, Tweenable) {
 
   Rekapi.util = {};
 
+  Rekapi.config = {
+    useTargetKeyframeForEasing: true
+  };
+
   // Some hooks for testing.  Gets compiled away at build time.
   if (REKAPI_DEBUG) {
     Rekapi._private = {
