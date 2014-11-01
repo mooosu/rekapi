@@ -244,22 +244,22 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * The Rekapi constructor.  The type of object provided as `opt_context` will
-   * determine how to render the animation.  If a plain object (`{}`) or
-   * nothing is given for `opt_context`, this animation will not render
-   * anything.  You can work with the animation the same as any other, but
-   * there is no visual representation.  Providing a reference to a
-   * `CanvasRenderingContext2D` will create a canvas animation, and providing a
-   * reference to a DOM element will create an animation that can be rendered
-   * as either a DOM or CSS `@keyframe` animation.
-   *
    * If this is a rendered animation, the appropriate renderer is accessible as
-   * `this.renderer`.
-   *
-   * A reference to `opt_context` is accessible as `this.context`.
-   * @param {Object|CanvasRenderingContext2D|HTMLElement=} opt_context
+   * `this.renderer`.  If provided, a reference to `opt_context` is accessible
+   * as `this.context`.
    * @class Rekapi
+   * @param {Object|CanvasRenderingContext2D|HTMLElement=} opt_context This
+   * determines how to render the animation.  If this is not provided or is a
+   * plain object (`{}`), the animation will not render anything and
+   * `this.renderer` will be `undefined`.  If this is a reference to a
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
+   * `{{#crossLink "Rekapi.CanvasRenderer"}}{{/crossLink}}` will be initialized
+   * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
+   * reference to a DOM element, `{{#crossLink
+   * "Rekapi.DOMRenderer"}}{{/crossLink}}` will be initialized as
+   * `this.renderer` for either a DOM or CSS `@keyframe`-based rendering.
    * @constructor
+   * @chainable
    */
   function Rekapi (opt_context) {
     this.context = opt_context || {};
@@ -335,16 +335,13 @@ var rekapiCore = function (root, _, Tweenable) {
   Rekapi._rendererInitHook = {};
 
   /**
-   * Add an actor to the animation.  Decorates the actor with a reference to
-   * this `Rekapi` instance as `rekapi`.  If `actor` is just an Object, that
-   * Object is used to as the constructor parameters for a new `Rekapi.Actor`
-   * instance that is created by this method.
-   *
-   *     var rekapi = new Rekapi();
-   *     var actor = rekapi.addActor(actor);
+   * Add an actor to the animation.  Decorates the added `actor` with a
+   * reference to this `Rekapi` instance as `this.rekapi`.
    *
    * @method addActor
-   * @param {Rekapi.Actor|Object} actor
+   * @param {Rekapi.Actor|Object} actor If this is an `Object`, it is used to
+   * as the constructor parameters for a new `{{#crossLink
+   * "Rekapi.Actor"}}{{/crossLink}}` instance that is created by this method.
    * @return {Rekapi.Actor} The actor that was added.
    */
   Rekapi.prototype.addActor = function (actor) {
@@ -378,8 +375,8 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Get a reference to an actor from the animation by its `id`.  You can use
-   * [`getActorIds`](#getActorIds) to get a list of IDs of all actors in the
-   * animation.
+   * `{{#crossLink "Rekapi/getActorIds:method"}}{{/crossLink}}` to get a list
+   * of IDs for all actors in the animation.
    * @method getActor
    * @param {number} actorId
    * @return {Rekapi.Actor}
@@ -392,17 +389,16 @@ var rekapiCore = function (root, _, Tweenable) {
    * Retrieve the `id`'s of all actors in an animation.
    *
    * @method getActorIds
-   * @return {Array.<number>}
+   * @return {Array(number)}
    */
   Rekapi.prototype.getActorIds = function () {
     return _.pluck(this._actors, 'id');
   };
 
   /**
-   * Retrieve all actors in the animation as an Object.  Actors' `id`'s
-   * correspond to the keys of the returned Object.
+   * Retrieve all actors in the animation as an Object.
    * @method getAllActors
-   * @return {Object}
+   * @return {Object} The keys of this Object correspond to the Actors' `id`s.
    */
   Rekapi.prototype.getAllActors = function () {
     return _.clone(this._actors);
@@ -439,12 +435,12 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Play the animation several times.  If `opt_howManyTimes` is omitted, the
-   * animation will loop endlessly.
+   * Play the animation.
    *
    * __[Example](../../../../docs/examples/play.html)__
    * @method play
-   * @param {number=} opt_howManyTimes
+   * @param {number=} opt_howManyTimes If omitted, the animation will loop
+   * endlessly.
    * @chainable
    */
   Rekapi.prototype.play = function (opt_howManyTimes) {
@@ -472,12 +468,12 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Move to a specific millisecond on the timeline and play from there.
-   * `opt_howManyTimes` works as it does in [`play()`](#play).
    *
    * __[Example](../../../../docs/examples/play_from.html)__
    * @method playFrom
    * @param {number} millisecond
-   * @param {number=} opt_howManyTimes
+   * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}.
    * @chainable
    */
   Rekapi.prototype.playFrom = function (millisecond, opt_howManyTimes) {
@@ -488,12 +484,13 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Play from the last frame that was rendered with [`update()`](#update).
-   * `opt_howManyTimes` works as it does in [`play()`](#play).
+   * Play from the last frame that was rendered with {{#crossLink
+   * "Rekapi/update:method"}}{{/crossLink}}.
    *
    * __[Example](../../../../docs/examples/play_from_current.html)__
    * @method playFromCurrent
-   * @param {number=} opt_howManyTimes
+   * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}.
    * @chainable
    */
   Rekapi.prototype.playFromCurrent = function (opt_howManyTimes) {
@@ -502,9 +499,10 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Pause the animation.  A "paused" animation can be resumed from where it
-   * left off with [`play()`](#play).
+   * left off with {{#crossLink "Rekapi/play:method"}}{{/crossLink}}.
    *
    * __[Example](../../../../docs/examples/pause.html)__
+   * @method pause
    * @param pause
    * @chainable
    */
@@ -525,7 +523,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Stop the animation.  A "stopped" animation will start from the beginning
-   * if [`play()`](#play) is called.
+   * if {{#crossLink "Rekapi/play:method"}}{{/crossLink}} is called.
    *
    * __[Example](../../../../docs/examples/stop.html)__
    * @method stop
@@ -547,23 +545,22 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Return whether or not the animation is playing (meaning not paused or
-   * stopped).
    * @method isPlaying
-   * @return {boolean}
+   * @return {boolean} Whether or not the animation is playing (meaning not paused or
+   * stopped).
    */
   Rekapi.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
   };
 
   /**
-   * Render an animation frame at a specific point in the timeline.  If
-   * `opt_millisecond` is omitted, this renders the last millisecond that was
-   * rendered (it's a re-render).
+   * Render an animation frame at a specific point in the timeline.
    *
    * __[Example](../../../../docs/examples/update.html)__
    * @method update
-   * @param {number=} opt_millisecond The point in the timeline at which to render.
+   * @param {number=} opt_millisecond The point in the timeline at which to
+   * render.  If omitted, this renders the last millisecond that was rendered
+   * (it's a re-render).
    * @chainable
    */
   Rekapi.prototype.update = function (opt_millisecond) {
@@ -588,66 +585,64 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Return the normalized timeline position (between 0 and 1) that was last
-   * rendered.
-   *
    * __[Example](../../../../docs/examples/get_last_position_updated.html)__
    * @method getLastPositionUpdated
-   * @return {number}
+   * @return {number} The normalized timeline position (between 0 and 1) that
+   * was last rendered.
    */
   Rekapi.prototype.getLastPositionUpdated = function () {
     return (this._lastUpdatedMillisecond / this._animationLength);
   };
 
   /**
-   * Return the length of the animation timeline, in milliseconds.
    * @method getAnimationLength
-   * @return {number}
+   * @return {number} The length of the animation timeline, in milliseconds.
    */
   Rekapi.prototype.getAnimationLength = function () {
     return this._animationLength;
   };
 
   /**
-   * Bind a handler function to a Rekapi event.  Valid events are:
+   * Bind a handler function to a Rekapi event.
+   *
+   * __[Example](../../../../docs/examples/bind.html)__
+   * @method on
+   * @param {string} eventName Valid values are:
    *
    * - __animationComplete__: Fires when all animation loops have completed.
    * - __playStateChange__: Fires when the animation is played, paused, or
    *   stopped.
-   * - __play__: Fires when the animation is [`play()`](#play)ed.
-   * - __pause__: Fires when the animation is [`pause()`](#pause)d.
-   * - __stop__: Fires when the animation is [`stop()`](#stop)ped.
+   * - __play__: Fires when the animation is {{#crossLink
+   *   "Rekapi/play:method"}}{{/crossLink}}ed.
+   * - __pause__: Fires when the animation is {{#crossLink
+   *   "Rekapi/pause:method"}}{{/crossLink}}d.
+   * - __stop__: Fires when the animation is {{#crossLink
+   *   "Rekapi/stop:method"}}{{/crossLink}}ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
    * - __addActor__: Fires when an actor is added.  `opt_data` is the
-   *   [`Actor`](rekapi.actor.js.html#Actor) that was added.
+   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was added.
    * - __removeActor__: Fires when an actor is removed.  `opt_data` is the
-   *   [`Actor`](rekapi.actor.js.html#Actor) that was removed.
+   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was removed.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
-   *   `opt_data` is the
-   *   [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty)
+   *   `opt_data` is the {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
    *   that was added.
-   * - __removeKeyframeProperty__: Fires when a keyframe property is removed.
-   *   `opt_data` is the
-   *   [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty)
-   *   that was removed.
+   * - __removeKeyframeProperty__: Fires when a {{#crossLink
+   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  `opt_data` is the
+   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
    *   actor that creates a new keyframe property track.  `opt_data` is the
-   *   [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty)
+   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
    *   that was added to create the property track.  A reference to the actor
    *   that the keyframe property is associated with can be accessed via
-   *   `.actor` and the track name that was added can be determined via
-   *   `.name`.
+   *   `opt_data.actor` and the track name that was added can be determined via
+   *   `opt_data.name`.
    * - __timelineModified__: Fires when a keyframe is added, modified or
    *   removed.
    * - __animationLooped__: Fires when an animation loop ends and a new one
    *   begins.
-   *
-   * __[Example](../../../../docs/examples/bind.html)__
-   * @method on
-   * @param {string} eventName
    * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as
-   * the first parameter and event-specific data as the second (opt_data).
+   * the first parameter and event-specific data as the second (`opt_data`).
    * @chainable
    */
   Rekapi.prototype.on = function (eventName, handler) {
@@ -661,14 +656,14 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Unbind `opt_handler` from a Rekapi event.  If `opt_handler` is omitted,
-   * all handler functions bound to `eventName` are unbound.  Valid events
-   * correspond to the list under [`on()`](#on).
+   * Unbind one or more handlers from a Rekapi event.
    *
    * __[Example](../../../../docs/examples/unbind.html)__
    * @method off
-   * @param {string} eventName
-   * @param {Function=} opt_handler
+   * @param {string} eventName Valid values correspond to the list under
+   * {{#crossLink "Rekapi/on:method"}}{{/crossLink}}.
+   * @param {Function=} opt_handler If omitted, all handler functions bound to
+   * `eventName` are unbound.
    * @chainable
    */
   Rekapi.prototype.off = function (eventName, opt_handler) {
@@ -689,11 +684,12 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Export the timeline to a reference-less `Object`.
+   * Export the timeline to a JSON-serializable `Object`.
    *
    * __[Example](../../../docs/examples/export_timeline.html)__
    * @method exportTimeline
-   * @return {Object}
+   * @return {Object} This data can later be consumed by {{#crossLink
+   * "Rekapi/importTimeline:method"}}{{/crossLink}}.
    */
   Rekapi.prototype.exportTimeline = function () {
     var exportData = {
@@ -709,10 +705,11 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Import data that was created by [`exportTimeline`](#exportTimeline).  This
-   * sets up all necessary actors and keyframes.  These methods collectively
-   * allow you serialize an animation (for sending to a server for persistence,
-   * for example) and later recreating an identical animation.
+   * Import data that was created by {{#crossLink
+   * "Rekapi/exportTimeline:method"}}{{/crossLink}}.  This sets up all actors
+   * and keyframes specified in the `rekapiData` parameter.  These two methods
+   * collectively allow you serialize an animation (for sending to a server for
+   * persistence, for example) and later recreating an identical animation.
    *
    * @method importTimeline
    * @param {Object} rekapiData Any object that has the same data format as the
